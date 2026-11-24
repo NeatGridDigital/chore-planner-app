@@ -223,6 +223,7 @@ table.wk{table-layout:fixed}table.wk th:not(:first-child){width:30px}
 table.wk td:first-child{max-width:none}
 .crow .t{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25}
 @media(min-width:760px){table.wk th:not(:first-child){width:58px}}
+.crow .s .pill{margin-right:7px;padding:1px 8px;font-size:11px;vertical-align:1px}.crow .s{margin-top:2px}
 </style></head>
 <body><div id="app"></div><div id="print"></div>
 <noscript>This app needs JavaScript turned on.</noscript>
@@ -507,8 +508,8 @@ table.wk td:first-child{max-width:none}
   function choreRow(ch, o, opt) {
     opt = opt || {}; var r = o.rows[ch.id], done = opt.done != null ? opt.done : doneToday(ch);
     var sub = [opt.noRoom ? null : ch.room, whoText(ch), ch.min ? ch.min + " min" : null, ch.pts ? plural(+ch.pts, "pt") : null].filter(Boolean).join(" · ");
-    return '<div class="crow' + (done ? " done" : "") + '">' + roomIcon(ch.room) + '<div class="sp" data-a="editchore" data-id="' + ch.id + '"><div class="t">' + esc(ch.name) + '</div><div class="s">' + esc(sub) + "</div></div>" +
-      (opt.pill === false || done ? "" : statePill(r)) + '<button class="chk' + (done ? " on" : "") + '" data-a="' + (done ? "undone" : "done") + '" data-id="' + ch.id + '" aria-label="' + (done ? "Done" : "Mark done") + '">' + I.check + "</button></div>";
+    return '<div class="crow' + (done ? " done" : "") + '">' + roomIcon(ch.room) + '<div class="sp" data-a="editchore" data-id="' + ch.id + '"><div class="t">' + esc(ch.name) + '</div><div class="s">' + (opt.pill === false || done ? "" : statePill(r)) + esc(sub) + "</div></div>" +
+      '<button class="chk' + (done ? " on" : "") + '" data-a="' + (done ? "undone" : "done") + '" data-id="' + ch.id + '" aria-label="' + (done ? "Done" : "Mark done") + '">' + I.check + "</button></div>";
   }
   function forMe(ch) { if (!view.me) return true; if (ch.who === "any") return true; if (ch.who === "rotate") return C.whoNext(S, ch) === view.me; return ch.who === view.me; }
   function peopleChips() {
@@ -585,7 +586,7 @@ table.wk td:first-child{max-width:none}
     var html = "";
     rooms.forEach(function (r) { var cs = list.filter(function (c) { return c.room === r; }); if (!cs.length) return;
       html += '<div class="grp">' + esc(r) + ' <span class="n">' + cs.length + "</span></div>" + cs.map(function (c) { var rr = o.rows[c.id];
-        return '<div class="crow">' + roomIcon(c.room) + '<div class="sp" data-a="editchore" data-id="' + c.id + '"><div class="t">' + esc(c.name) + '</div><div class="s">' + esc(c.freq + " · " + whoText(c) + (c.pts ? " · " + plural(+c.pts, "pt") : "")) + "</div></div>" + statePill(rr) +
+        return '<div class="crow">' + roomIcon(c.room) + '<div class="sp" data-a="editchore" data-id="' + c.id + '"><div class="t">' + esc(c.name) + '</div><div class="s">' + statePill(rr) + esc(c.freq + " · " + whoText(c) + (c.pts ? " · " + plural(+c.pts, "pt") : "")) + "</div></div>" +
           '<button class="chk' + (doneToday(c) ? " on" : "") + '" data-a="' + (doneToday(c) ? "undone" : "done") + '" data-id="' + c.id + '" aria-label="Mark done">' + I.check + "</button></div>"; }).join(""); });
     return top() + '<div class="wrap"><div class="daynav"><b style="text-align:left">Chores <span class="muted small">' + S.chores.length + "</span></b>" + '<button class="btn sm" data-a="newchore">' + I.plus + "New chore</button></div>" +
       '<div class="search">' + I.search + '<input class="in" id="q" placeholder="Search chores" value="' + esc(view.q) + '"></div>' +
